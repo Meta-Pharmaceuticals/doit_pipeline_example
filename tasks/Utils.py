@@ -35,7 +35,8 @@ class Utils:
         cmd = [str(i) for i in cmd_args]
         if os.name == 'nt':
             cmd = [cmd[0]] + ["--max-mem-size=20000M"] + cmd[1:]
-        self.log.info(f'executing cmd: {cmd}')
+        executedCmd = ' '.join(cmd)
+        self.log.info(f'executing cmd: {executedCmd}')
         self.process = run(cmd, capture_output=True)
         self.log.info(self.process.returncode)
         self.log.info(self.process.stdout)
@@ -43,6 +44,7 @@ class Utils:
         self.historyHanlder.putHistory(rtask, self.process)
 
         if self.process.returncode != 0:
+            self.log.error(self.process.stderr)
             raise RuntimeError(self.process.stderr)
 
 

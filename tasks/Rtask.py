@@ -28,7 +28,7 @@ class RtaskBuilder:
             self.rtask.name = _script.stem
         return self
 
-    def setInputs(self, inputs: list):
+    def setInputs(self, *inputs):
         _inputs = []
         for input in inputs:
             if isinstance(input, Rtask):
@@ -38,7 +38,7 @@ class RtaskBuilder:
         self.rtask.inputs = _inputs
         return self
 
-    def setOutputs(self, outputs: list):
+    def setOutputs(self, *outputs):
         _outputs = []
         for output in outputs:
             _output = self.utils.toAbsPath(output)
@@ -50,7 +50,7 @@ class RtaskBuilder:
         self.rtask.outputs = _outputs
         return self
     
-    def setVersionedOutputs(self, outputs: list):
+    def setVersionedOutputs(self, *outputs):
         timestr = time.strftime("%Y%m%d-%H%M%S")
         versionedOutputs = []
         for output in outputs:
@@ -63,7 +63,7 @@ class RtaskBuilder:
         _extraParam = []
         if isinstance(params, dict):
             for k in paramOrder:
-                _extraParam.append(params.get[k, ''])
+                _extraParam.append(params.get(k, ''))
         else:
             _extraParam = params
         self.rtask.extraParam = _extraParam
@@ -73,7 +73,8 @@ class RtaskBuilder:
         taskDic = {'basename': self.rtask.name, 'verbosity': 2}
         taskDic['actions'] = [(self.utils.executeRtask, [self.rtask])]
         taskDic['targets'] = self.rtask.outputs
-        taskDic['file_dep'] = [self.rtask.script, *self.rtask.inputs]
+        inputFileDeps = [i for i in self.rtask.inputs if not i.is_dir()]
+        taskDic['file_dep'] = [self.rtask.script, *inputFileDeps]
         # print(taskDic)
 
         self.rtask.create_doit_tasks = lambda: taskDic
