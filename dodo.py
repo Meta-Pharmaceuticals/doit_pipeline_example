@@ -3,6 +3,7 @@ from taskUtils import download_geo_sup_file
 from pathlib import Path
 import tarfile
 
+DOIT_CONFIG = {'backend': 'json'}
 
 gsenum = 'GSE197023'
 gse_raw_data_dir = Path.cwd() / "data/raw"
@@ -40,7 +41,7 @@ annotated_seurat = annotated_seurat_res.outputs[0]
 
 recluster_res = RtaskBuilder().setScript('R/recluster_T_cells.R') \
     .setInputs(annotated_seurat) \
-    .setOutputs('data/recluster_Keratinocytes_cells.rds', 'data/plots/recluster_Keratinocytes_cells.umap.png') \
+    .setOutputs('data/recluster_Keratinocytes_cells.rds', 'data/plots/5_recluster_Keratinocytes_cells.umap.png') \
     .setExtraParam(['Keratinocytes']).build()
 recluster = recluster_res.outputs[0]
 

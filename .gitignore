@@ -4,6 +4,7 @@ log/
 history
 .doit.db.db
 data/
+.doit.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
